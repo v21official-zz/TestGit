@@ -1,0 +1,109 @@
+﻿
+@using Pr_mini.Data
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 col-xs-3">
+            <img src="~/Content/img/mechanic.jpg" title="Mechanic" alt="MECHANIC" />
+        </div>
+        <div class="col-md-8 ocl-xs-8">
+            <em style="color:#a51457">Bạn đi xe máy? Di chuyển hàng ngày? Chắc hẳn là sợ "<em>hỏng xe</em>" giống mình :))</em><br />
+            <em style="color: #a51457">OKAY! Website này sẽ giải quyết vấn đề của bản thân mình và các bạn.</em><br /><br />
+            <p>Một ngày đẹp trời, bạn đang trên đường đi làm, đi học, đi chơi với gấu...mà bỗng nhiên chiếc xe xinh xắn của bạn
+             <em>đổ bệnh</em>. Thôi xong! Gần đây làm gì có tiệm sửa xe nào? Kêu cứu ai bây giờ đây? <br />
+             Đừng sợ! Bình tĩnh lấy thiết bị có kết nối internet ra và truy cập website: <a href="www.thosuaxe.vn">http://www.thosuaxe.vn</a><br />
+             Việc của bạn chỉ là tìm kiếm thợ sửa xe theo khu vực gần mình nhất, gọi hỗ trợ và chờ đợi ít phút. Quá ngon phải không ^^<br />
+             Hãy xây dựng cộng đồng vì nhau, hãy thêm thông tin những người thợ tốt bụng của chúng ta vào trong danh sách để tất cả có thể liên lạc khi gặp sự cố.</p>
+
+            <p></p>
+            <p></p>
+        </div>
+    </div><br />
+    <div class="row">
+        <h1 style="color:#27b17e; font-family:serif;" class="col-md-12 text-center"><small>CỨU HỘ XE MÁY HÀ NỘI</small></h1>
+    </div><br />
+    <div class="row">
+        <div class="col-md-1 offset-1">
+            <div class="row">
+                <label for="MechanicName" style="padding-top: 8px;padding-left: 38px;">Tên thợ</label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" id="MechanicName" placeholder="Nhập tên thợ sửa xe" />
+        </div>
+        <div class="col-md-1">
+            <div class="row">
+                <label for="AreaID" style="padding-top: 8px;padding-left: 0px;">Quận/Huyện</label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <select class="form-control" id="AreaID">
+                <option value="0">Tất cả</option>
+                @{
+                    List<Area> lstArea = ViewBag.listArea;
+
+                    foreach (var area in lstArea)
+                    {
+                        <option value="@area.ID">@area.AreaName</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary" onclick="search()">
+                <i class="fa fa-search"></i> Tìm kiếm
+            </button> 
+        </div>
+    </div><br />
+    <div class="col-md-12">
+        <div class="col-md-1 offset-10">
+            <button class="btn btn-secondary" data-toggle="modal" data-target="#add_mechanic">
+                <i class="fa fa-plus"></i> Thêm thợ
+            </button> 
+        </div> 
+    </div>
+    <div class="row" id="grid">
+       @{Html.RenderAction("SearchMechanic", "Mechanic", new { page = 1, AreaIDSearch = 0 });}
+    </div>
+</div>
+
+
+@Html.Partial("_CreateMechanic")
+
+<script type="text/javascript">
+    function search() {
+
+        var $mechanicName = $("#MechanicName").val();
+        var $areaID = $("#AreaID").val();
+        $.ajax({
+            type: "POST",
+            url: "/Mechanic/SearchMechanic",
+            data: { page: 1, MechanicNameSearch:$mechanicName, AreaIDSearch:$areaID },
+            success: function (result) {
+                $("#grid").html(result);
+            }
+        });
+    }
+
+    function saveMechanic() {
+
+        var $mechanicName = $("#add_mechanic #MechanicName").val();
+        var $phone = $("#add_mechanic #Phone").val();
+        var $address = $("#add_mechanic #Address").val();
+        var $areaID = $("#add_mechanic #AreaID").val();
+        $.ajax({
+            //type: "POST",
+            url: "/Mechanic/AddMechanic",
+            data: { page: 1, MechanicName: $mechanicName, Phone: $phone, Address: $address, AreaID: $areaID },
+            success: function (result) {
+                alert(result);
+                window.location("/Home/Index");
+               // $("#add_mechanic").modal("hide");
+                $("#add_mechanic").modal("hide");//lưu xong thì đóng pop up
+                search();
+            }
+        });
+    }
+
+</script>

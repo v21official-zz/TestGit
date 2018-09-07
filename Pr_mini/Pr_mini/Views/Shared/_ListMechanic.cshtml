@@ -1,0 +1,50 @@
+﻿@model PagedList.IPagedList<Pr_mini.Data.Mechanic>
+
+@using PagedList
+@using PagedList.Mvc
+
+<div class="col-md-12">
+    <table class="table table-bordered table-hover table-success">
+        <thead class="text-center">
+            <tr>
+                <th>STT</th>
+                <th>Tên thợ sửa xe</th>
+                <th>SĐT</th>
+                <th>Địa chỉ</th>
+                <th>Chỉnh sửa</th>
+                <th>Xóa</th>
+            </tr>
+        </thead>
+        <tbody class="text-center">
+            @{
+                int stt = 0;
+                foreach (var me in Model)
+                {
+                    stt++;
+                    <tr>
+                        <td>@stt</td>
+                        <td>@me.MechanicName</td>
+                        <td>@me.Phone</td>
+                        <td>@me.Address</td>
+                        <td><button class="btn btn-secondary" onclick=""><i class="fa fa-edit"></i></button></td>
+                        <td><button class="btn btn-danger"><i class="fa fa-trash-o"></i></button></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+<div class="col-md-12 text-right">
+    Trang @Model.PageNumber/@Model.PageCount
+</div>
+<div class="col-md-12 text-right">
+    @Html.PagedListPager(
+    Model,
+    page => Url.Action("SearchMechanic", new { page = page, AreaIDSearch = ViewBag.AreaIDSearch, MechanicNameSearch = ViewBag.MechanicNameSearch }),
+    PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "grid" })
+)
+</div>
+

@@ -1,0 +1,88 @@
+﻿@using Pr_mini.Data
+
+<div class="modal fade" id="add_mechanic">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thêm thợ sửa xe</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <form id="formAddMechanic" name="addMechanic" ng-app="addMechanic" ng-controller="validateCtrl" novalidate>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label>Tên thợ</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" id="MechanicName" name="MechanicName" class="form-control" placeholder="Nhập tên đi" ng-model="MechanicName" required />
+                            <span class="error" ng-show="addMechanic.MechanicName.$dirty && addMechanic.MechanicName.$invalid">
+                                <span class="error" style="color:red" ng-show="addMechanic.MechanicName.$error.required"><i class="fa fa-exclamation-triangle"></i> Tên thợ không được để trống</span>
+                            </span>
+                            <span class="info" style="color:green" ng-show="addMechanic.MechanicName.$valid"><i class="fa fa-check"></i> Nhập chuẩn rồi đấy thằng nhóc :))</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label>Số điện thoại</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="number" id="Phone" name="Phone" ng-model="Phone" class="form-control" placeholder="Nhập số điện thoại đi" maxlength="12" minlength="9" required />
+                            <span class="error" ng-show="addMechanic.Phone.$dirty && addMechanic.Phone.$invalid">
+                                <span class="error" style="color:red" ng-show="addMechanic.Phone.$error.required"><i class="fa fa-exclamation-triangle"></i> Số điện thoại không được để trống</span>
+                                <span class="error" ng-show="addMechanic.Phone.$error.minlength"><i class="fa fa-exclamation-triangle"></i> SĐT không được nhập dưới 9 ký tự</span>
+                                <span class="error" ng-show="addMechanic.Phone.$error.maxlength"><i class="fa fa-exclamation-triangle"></i> SĐT không được nhập quá 12 ký tự</span>
+                            </span>
+                            <span class="info" style="color:green" ng-show="addMechanic.Phone.$valid"><i class="fa fa-check"></i> Nhập chuẩn rồi đấy thằng nhóc :))</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label>Địa chỉ cụ thể</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" id="Address" name="Address" class="form-control" ng-model="Address" placeholder="Nhập địa chỉ đi" required />
+                            <span class="error" ng-show="addMechanic.Address.$dirty && addMechanic.Address.$invalid">
+                                <span class="error" style="color:red" ng-show="addMechanic.Address.$error.required"><i class="fa fa-exclamation-triangle"></i> Địa chỉ không được để trống</span>
+                            </span>
+                            <span class="info" style="color:green" ng-show="addMechanic.Address.$valid"><i class="fa fa-check"> Nhập chuẩn rồi đấy thằng nhóc :))</i></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label>Quận/Huyện</label>
+                        </div>
+                        <div class="col-md-8">
+                            <select class="form-control" id="AreaID">
+                                @{
+                                    Pr_mini.Data.Connection cnn = new Pr_mini.Data.Connection();
+                                    List<Pr_mini.Data.Area> list = cnn.Area.Where(u => u.IsActive.Equals(1)).ToList();
+                                    if (list != null && list.Count > 0)
+                                    {
+                                        foreach (var area in list)
+                                        {
+                                            <option value="@area.ID">@area.AreaName</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="saveMechanic()">Lưu</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+@Scripts.Render("~/bundles/angular")
+
+<script @*type="text/javascript"*@>
+    var app = angular.module('addMechanic', []);
+    app.controller('validateCtrl', function ($scope) {
+
+    });
+</script>
